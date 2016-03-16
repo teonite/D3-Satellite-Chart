@@ -3,7 +3,7 @@ export class SatChart {
   constructor(element, data, {
     width = 600,
     height = 300,
-    valueRange = [1, 10],
+    valueRange = [1, 5.5, 10],
     strokeWidth = 2,
     distanceRatio = 3 // sun-to-planets / planets-to-moons
     }) {
@@ -42,6 +42,9 @@ export class SatChart {
   init() {
 
     this.computeLayout();
+    this.scale = d3.scale.linear()
+      .domain(this.config.valueRange)
+      .range(['#ff0000', '#ffff00', '#00ff00']);
 
     // svg
     this.svg = d3.select(this.element)
@@ -84,7 +87,7 @@ export class SatChart {
         r: this.config.innerSunRadius,
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
-        fill: 'white'
+        fill: this.scale(this.data.value)
       });
 
     // planets
@@ -101,7 +104,7 @@ export class SatChart {
         r: this.config.planetRadius,
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
-        fill: 'white'
+        fill: (d) => this.scale(d.value)
       })
 
     // moons
@@ -122,7 +125,7 @@ export class SatChart {
         r: this.config.moonRadius,
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
-        fill: 'white'
+        fill: (d) => this.scale(d.value)
       })
   }
 
