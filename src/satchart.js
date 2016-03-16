@@ -35,11 +35,11 @@ export class SatChart {
     };
 
     // draw chart
-    this.init();
+    this.drawChart();
 
   }
 
-  init() {
+  drawChart() {
 
     this.computeLayout();
     this.scale = d3.scale.linear()
@@ -79,7 +79,9 @@ export class SatChart {
 
     // inner sun
     this.innerSun = this.svg.append('g')
-      .attr('class', 'sun outer')
+      .attr('class', 'sun inner');
+
+    this.innerSun
       .append('circle')
       .attr({
         cx: this.data.position.x,
@@ -89,6 +91,18 @@ export class SatChart {
         'stroke-width': this.config.strokeWidth,
         fill: this.scale(this.data.value)
       });
+
+    this.innerSun.append('text')
+      .attr({
+        x: this.data.position.x,
+        y: this.data.position.y,
+        'font-family': 'sans-serif',
+        'font-size': 50,
+        'text-anchor': 'middle',
+        'alignment-baseline': 'middle',
+        fill: 'black',
+      })
+      .text(this.data.label);
 
     // planets
     this.planets = this.svg.append('g')
