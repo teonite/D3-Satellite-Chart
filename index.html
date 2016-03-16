@@ -1,22 +1,24 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>SatChart Example</title>
     <script src="node_modules/d3/d3.js" type="text/javascript"></script>
+    <script src="example_data.js" type="text/javascript"></script>
     <script src="satchart.js" type="text/javascript"></script>
-  </head>
-  <body>
-    <div id="vis-container"></div>
+</head>
+<body>
+<div id="vis-container"></div>
 
-    <script type="text/javascript">
-      new satchart.SatChart(
-              document.getElementById('vis-container'),
-              {
-                width: 600,
-                height: 600
-              }
-      );
-    </script>
-  </body>
+<script type="text/javascript">
+    new satchart.SatChart(
+            document.getElementById('vis-container'),
+            data,
+            {
+                width: 1000,
+                height: 1000
+            }
+    );
+</script>
+</body>
 </html>
