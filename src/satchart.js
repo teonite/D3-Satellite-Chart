@@ -1,4 +1,4 @@
-export default class SatChart {
+export class SatChart {
   constructor() {
     console.log('SatChart constructor');
   }

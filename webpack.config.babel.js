@@ -1,11 +1,17 @@
 import webpack from 'webpack'
 import path from 'path'
 
+
+const dir_src = path.join(__dirname, 'src')
+const dir_dist = path.join(__dirname, 'dist')
+
 export default {
-  entry: './src/satchart.js',
+  entry: path.join(dir_src, 'satchart.js'),
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: dir_dist,
     filename: 'satchart.js',
+    library: 'satchart',
+    libraryTarget: 'var'
   },
   module: {
     loaders: [
