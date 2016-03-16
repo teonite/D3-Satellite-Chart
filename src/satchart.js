@@ -4,12 +4,13 @@ export class SatChart {
     width = 600,
     height = 300,
     valueRange = [1, 5.5, 10],
+    colorRange = ['#ff0000', '#ffff00', '#00ff00'],
     strokeWidth = .5,
     distanceRatio = 4 // sun-to-planets / planets-to-moons
     }) {
 
     // config
-    const outerSunRadius = height / 10;
+    const outerSunRadius = Math.min(width, height) / 10;
     const innerSunRadius = outerSunRadius / 2;
     const planetRadius = height / 20;
     const moonRadius = height / 40;
@@ -30,6 +31,7 @@ export class SatChart {
       strokeWidth,
       height,
       valueRange,
+      colorRange,
       outerSunRadius,
       innerSunRadius
     };
@@ -44,7 +46,7 @@ export class SatChart {
     this.computeLayout();
     this.scale = d3.scale.linear()
       .domain(this.config.valueRange)
-      .range(['#ff0000', '#ffff00', '#00ff00']);
+      .range(this.config.colorRange);
 
     // svg
     this.svg = d3.select(this.element)
@@ -55,27 +57,24 @@ export class SatChart {
     // outer sun
     this.outerSun = this.svg.append('g')
       .attr('class', 'sun outer');
-    this.outerSun
-      .append('circle')
-      .attr({
-        cx: this.data.position.x,
-        cy: this.data.position.y,
-        r: this.config.outerSunRadius,
-        stroke: 'black',
-        'stroke-width': this.config.strokeWidth,
-        fill: 'white'
-      });
 
-    this.outerSun.selectAll('line')
+    const outerSunArc = d3.svg.arc()
+      .innerRadius(this.config.outerSunRadius * 0.9)
+      .outerRadius(this.config.outerSunRadius)
+      .startAngle((d, i) => (i * 2*Math.PI / this.data.satellites.length))
+      .endAngle((d, i) => (i + 1) * 2*Math.PI / this.data.satellites.length);
+
+    this.outerSun.selectAll('path')
       .data(this.data.satellites)
       .enter()
-      .append('line')
-      .attr('x1', (d, i) => this.config.cx + this.config.outerSunRadius * Math.sin(i * 2*Math.PI / this.data.satellites.length))
-      .attr('y1', (d, i) => this.config.cy + this.config.outerSunRadius * Math.cos(i * 2*Math.PI / this.data.satellites.length))
-      .attr('x2', this.config.cx)
-      .attr('y2', this.config.cy)
-      .attr('stroke', 'black')
-      .attr('stroke-width', this.config.strokeWidth);
+      .append('path')
+      .attr('d', outerSunArc)
+      .attr({
+        transform: `translate(${this.data.position.x}, ${this.data.position.y})`,
+        fill: (d) => this.scale(d.value),
+        stroke: 'black',
+        'stroke-width': this.config.strokeWidth
+      });
 
     // inner sun
     this.innerSun = this.svg.append('g')
@@ -100,7 +99,7 @@ export class SatChart {
         'font-size': 50,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: 'black'
       })
       .text(this.data.label);
 
@@ -132,10 +131,9 @@ export class SatChart {
         'font-size': 20,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: 'black'
       })
       .text((d) => d.label);
-
 
     // moons
     const moons = this.data.satellites
@@ -156,7 +154,7 @@ export class SatChart {
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
         fill: (d) => this.scale(d.value)
-      })
+      });
 
     this.moons.selectAll('text')
       .data(moons)
@@ -169,7 +167,7 @@ export class SatChart {
         'font-size': 12,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: 'black'
       })
       .text((d) => d.label);
 
@@ -188,7 +186,7 @@ export class SatChart {
     this.data.satellites.forEach((planet, plenetIndex) => {
       planet.position = {
         x: this.config.cx + this.config.sunToPlanet * Math.sin(planetAngle * (plenetIndex + 0.5)),
-        y: this.config.cy + this.config.sunToPlanet * Math.cos(planetAngle * (plenetIndex + 0.5))
+        y: this.config.cy - this.config.sunToPlanet * Math.cos(planetAngle * (plenetIndex + 0.5))
       };
 
       // satellite positions
@@ -196,7 +194,7 @@ export class SatChart {
       planet.satellites.forEach((satellite, satelliteIndex) => {
         satellite.position = {
           x: planet.position.x + this.config.planetToMoon * Math.sin(satelliteAngle * satelliteIndex),
-          y: planet.position.y + this.config.planetToMoon * Math.cos(satelliteAngle * satelliteIndex),
+          y: planet.position.y + this.config.planetToMoon * Math.cos(satelliteAngle * satelliteIndex)
         }
       })
     })
