@@ -5,7 +5,7 @@ export class SatChart {
     height = 300,
     valueRange = [1, 10],
     strokeWidth = 2,
-    distanceRatio = 4 // sun-to-planets / planets-to-moons
+    distanceRatio = 3 // sun-to-planets / planets-to-moons
     }) {
 
     // config
@@ -103,6 +103,27 @@ export class SatChart {
         'stroke-width': this.config.strokeWidth,
         fill: 'white'
       })
+
+    // moons
+    const moons = this.data.satellites
+      .map(function(planet) {return planet.satellites}) // extract moon arrays
+      .reduce(function(acc, moons) {return acc.concat(moons)}, []); // concatenate moon arrays
+
+    this.moons = this.svg.append('g')
+      .attr('class', 'moons');
+
+    this.moons.selectAll('circle')
+      .data(moons)
+      .enter()
+      .append('circle')
+      .attr({
+        cx: (d) => d.position.x,
+        cy: (d) => d.position.y,
+        r: this.config.moonRadius,
+        stroke: 'black',
+        'stroke-width': this.config.strokeWidth,
+        fill: 'white'
+      })
   }
 
   computeLayout() {
@@ -113,13 +134,22 @@ export class SatChart {
       y: this.config.cy
     };
 
+    // planet positions
     const planetAngle = 2 * Math.PI / this.data.satellites.length;
-    this.data.satellites.forEach((planet, index) => {
+    this.data.satellites.forEach((planet, plenetIndex) => {
       planet.position = {
-        x: this.config.cx + this.config.sunToPlanet * Math.sin(planetAngle * (index + 0.5)),
-        y: this.config.cy + this.config.sunToPlanet * Math.cos(planetAngle * (index + 0.5))
+        x: this.config.cx + this.config.sunToPlanet * Math.sin(planetAngle * (plenetIndex + 0.5)),
+        y: this.config.cy + this.config.sunToPlanet * Math.cos(planetAngle * (plenetIndex + 0.5))
       };
-      // TODO: moons
+
+      // satellite positions
+      const satelliteAngle = 2 * Math.PI / planet.satellites.length;
+      planet.satellites.forEach((satellite, satelliteIndex) => {
+        satellite.position = {
+          x: planet.position.x + this.config.planetToMoon * Math.sin(satelliteAngle * satelliteIndex),
+          y: planet.position.y + this.config.planetToMoon * Math.cos(satelliteAngle * satelliteIndex),
+        }
+      })
     })
   }
 }
