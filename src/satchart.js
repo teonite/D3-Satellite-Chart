@@ -4,8 +4,8 @@ export class SatChart {
     width = 600,
     height = 300,
     valueRange = [1, 5.5, 10],
-    strokeWidth = 2,
-    distanceRatio = 3 // sun-to-planets / planets-to-moons
+    strokeWidth = .5,
+    distanceRatio = 4 // sun-to-planets / planets-to-moons
     }) {
 
     // config
@@ -119,7 +119,23 @@ export class SatChart {
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
         fill: (d) => this.scale(d.value)
+      });
+
+    this.planets.selectAll('text')
+      .data(this.data.satellites)
+      .enter()
+      .append('text')
+      .attr({
+        x: (d) => d.position.x,
+        y: (d) => d.position.y,
+        'font-family': 'sans-serif',
+        'font-size': 20,
+        'text-anchor': 'middle',
+        'alignment-baseline': 'middle',
+        fill: 'black',
       })
+      .text((d) => d.label);
+
 
     // moons
     const moons = this.data.satellites
@@ -141,6 +157,22 @@ export class SatChart {
         'stroke-width': this.config.strokeWidth,
         fill: (d) => this.scale(d.value)
       })
+
+    this.moons.selectAll('text')
+      .data(moons)
+      .enter()
+      .append('text')
+      .attr({
+        x: (d) => d.position.x,
+        y: (d) => d.position.y,
+        'font-family': 'sans-serif',
+        'font-size': 12,
+        'text-anchor': 'middle',
+        'alignment-baseline': 'middle',
+        fill: 'black',
+      })
+      .text((d) => d.label);
+
   }
 
   computeLayout() {
