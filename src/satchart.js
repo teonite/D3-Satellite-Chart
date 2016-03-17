@@ -11,7 +11,7 @@ export class SatChart {
     }) {
 
     // config
-    const outerSunRadius = Math.min(width, height) / 10;
+    const outerSunRadius = Math.min(width, height) / 6.5;
     const innerSunRadius = outerSunRadius * 0.8;
     const planetRadius = height / 20;
     const moonRadius = height / 40;
@@ -110,13 +110,13 @@ export class SatChart {
       .enter()
       .append('text')
       .attr({
-        x: (d) => d.position.x,
-        y: (d) => d.position.y,
+        x: (d) => d.position.label.x,
+        y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
-        'font-size': 20,
+        'font-size': 30,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: (d) => this.scale(d.value),
         'fill-opacity': 0
       })
       .text((d) => d.label);
@@ -336,7 +336,11 @@ export class SatChart {
     this.data.satellites.forEach((planet, plenetIndex) => {
       planet.position = {
         x: this.config.cx + this.config.sunToPlanet * Math.sin(planetAngle * (plenetIndex + 0.5)),
-        y: this.config.cy - this.config.sunToPlanet * Math.cos(planetAngle * (plenetIndex + 0.5))
+        y: this.config.cy - this.config.sunToPlanet * Math.cos(planetAngle * (plenetIndex + 0.5)),
+        label: {
+          x: this.config.cx + this.config.sunToPlanet * 1.6 * Math.sin(planetAngle * (plenetIndex + 0.5)),
+          y: this.config.cy - this.config.sunToPlanet * 1.6 * Math.cos(planetAngle * (plenetIndex + 0.5))
+        }
       };
 
       // satellite positions
