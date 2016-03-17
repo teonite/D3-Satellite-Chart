@@ -220,7 +220,7 @@ export class SatChart {
         stroke: 'gray'
       });
 
-     //outer sun
+     // outer sun
     const outerSunArc = d3.svg.arc()
       .innerRadius(this.config.outerSunRadius * 0.9)
       .outerRadius(this.config.outerSunRadius)
@@ -262,6 +262,7 @@ export class SatChart {
       });
 
     // planets
+    const config = this.config;
     this.planets.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
@@ -270,7 +271,26 @@ export class SatChart {
       .attr({
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
-        r: this.config.planetRadius,
+        r: this.config.planetRadius
+      })
+      .each('end', () => {
+        this.planets.selectAll('circle')
+          .on('mouseover', function (data) {
+            const planet = d3.select(this);
+            planet
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.planetRadius * 1.3)
+          })
+          .on('mouseout', function (data) {
+            const planet = d3.select(this);
+            planet
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.planetRadius)
+          });
       });
 
     this.planets.selectAll('text')
