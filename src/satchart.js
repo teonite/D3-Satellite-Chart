@@ -6,7 +6,7 @@ export class SatChart {
     valueRange = [1, 5.5, 10],
     colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
     strokeWidth = .5,
-    distanceRatio = 4, // sun-to-planets / planets-to-moons,
+    distanceRatio = 3, // sun-to-planets / planets-to-moons,
     animationDuration = 2000
     }) {
 
@@ -68,7 +68,7 @@ export class SatChart {
         stroke: 'white',
         'stroke-width': this.config.strokeWidth,
         fill: 'white',
-        'stroke-dasharray': [5, 10]
+        'stroke-dasharray': [10, 10]
       });
 
     // planet orbits
@@ -245,8 +245,8 @@ export class SatChart {
 
     this.innerSun.selectAll('text')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.7)
+      .duration(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.5)
       .attr({
         'fill-opacity': 1
       });
@@ -265,7 +265,7 @@ export class SatChart {
     this.planets.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
-      .delay(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.2)
       .ease('elastic')
       .attr({
         cx: (d) => d.position.x,
@@ -275,8 +275,8 @@ export class SatChart {
 
     this.planets.selectAll('text')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.7)
+      .duration(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.5)
       .attr({
         'fill-opacity': 1
       });
@@ -285,7 +285,7 @@ export class SatChart {
     this.moons.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
-      .delay(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.4)
       .ease('elastic')
       .attr({
         cx: (d) => d.position.x,
@@ -295,8 +295,8 @@ export class SatChart {
 
     this.moons.selectAll('text')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.7)
+      .duration(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.5)
       .attr({
         'fill-opacity': 1
       });
