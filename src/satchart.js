@@ -22,6 +22,7 @@ export class SatChart {
     const [cx, cy] = [width / 2, height / 2];
     this.config = {
       width,
+      height,
       cx,
       cy,
       planetRadius,
@@ -29,7 +30,6 @@ export class SatChart {
       sunToPlanet,
       planetToMoon,
       strokeWidth,
-      height,
       valueRange,
       colorRange,
       outerSunRadius,
@@ -53,6 +53,21 @@ export class SatChart {
       .append('svg')
       .attr('width', this.config.width)
       .attr('height', this.config.height);
+
+    // sun orbit
+    this.sunOrbit = this.svg.append('g')
+      .attr('class', 'sun-orbit');
+
+    this.sunOrbit.append('circle')
+      .attr({
+        cx: this.data.position.x,
+        cy: this.data.position.y,
+        r: this.config.sunToPlanet,
+        stroke: 'gray',
+        'stroke-width': this.config.strokeWidth,
+        fill: 'white',
+        //'stroke-dasharray': [10, 10]
+      });
 
     // outer sun
     this.outerSun = this.svg.append('g')
@@ -102,6 +117,23 @@ export class SatChart {
         fill: 'black'
       })
       .text(this.data.label);
+
+    // planet orbits
+    this.planetOrbits = this.svg.append('g')
+      .attr('class', 'planet-orbits');
+
+    this.planetOrbits.selectAll('circle')
+      .data(this.data.satellites)
+      .enter()
+      .append('circle')
+      .attr({
+        cx: (d) => d.position.x,
+        cy: (d) => d.position.y,
+        r: this.config.planetToMoon,
+        stroke: (d) => this.scale(d.value),
+        'stroke-width': this.config.strokeWidth,
+        fill: 'white',
+      });
 
     // planets
     this.planets = this.svg.append('g')

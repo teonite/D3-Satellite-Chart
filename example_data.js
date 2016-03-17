@@ -1,5 +1,5 @@
 var data = {
-  label: 'A',
+  label: 'A--',
   value: 9,
   satellites: [
     {
