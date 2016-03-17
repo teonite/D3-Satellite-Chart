@@ -71,6 +71,40 @@ export class SatChart {
         'stroke-dasharray': [5, 10]
       });
 
+    // planet orbits
+    this.planetOrbits = this.svg.append('g')
+      .attr('class', 'planet-orbits');
+
+    this.planetOrbits.selectAll('circle')
+      .data(this.data.satellites)
+      .enter()
+      .append('circle')
+      .attr({
+        cx: (d) => d.position.x,
+        cy: (d) => d.position.y,
+        r: this.config.planetToMoon,
+        stroke: (d) => this.scale(d.value),
+        'stroke-width': this.config.strokeWidth,
+        fill: 'white',
+      });
+
+    // planets
+    this.planets = this.svg.append('g')
+      .attr('class', 'planets');
+
+    this.planets.selectAll('circle')
+      .data(this.data.satellites)
+      .enter()
+      .append('circle')
+      .attr({
+        cx: this.data.position.x,
+        cy: this.data.position.y,
+        r: 0,
+        stroke: 'black',
+        'stroke-width': this.config.strokeWidth,
+        fill: (d) => this.scale(d.value)
+      });
+
     // outer sun
     this.outerSun = this.svg.append('g')
       .attr('class', 'sun outer');
@@ -120,40 +154,6 @@ export class SatChart {
       })
       .text(this.data.label);
 
-    // planet orbits
-    this.planetOrbits = this.svg.append('g')
-      .attr('class', 'planet-orbits');
-
-    this.planetOrbits.selectAll('circle')
-      .data(this.data.satellites)
-      .enter()
-      .append('circle')
-      .attr({
-        cx: (d) => d.position.x,
-        cy: (d) => d.position.y,
-        r: this.config.planetToMoon,
-        stroke: (d) => this.scale(d.value),
-        'stroke-width': this.config.strokeWidth,
-        fill: 'white',
-      });
-
-    // planets
-    this.planets = this.svg.append('g')
-      .attr('class', 'planets');
-
-    this.planets.selectAll('circle')
-      .data(this.data.satellites)
-      .enter()
-      .append('circle')
-      .attr({
-        cx: (d) => d.position.x,
-        cy: (d) => d.position.y,
-        r: this.config.planetRadius,
-        stroke: 'black',
-        'stroke-width': this.config.strokeWidth,
-        fill: (d) => this.scale(d.value)
-      });
-
     this.planets.selectAll('text')
       .data(this.data.satellites)
       .enter()
@@ -182,9 +182,9 @@ export class SatChart {
       .enter()
       .append('circle')
       .attr({
-        cx: (d) => d.position.x,
-        cy: (d) => d.position.y,
-        r: this.config.moonRadius,
+        cx: (d) => d.position.parent.x,
+        cy: (d) => d.position.parent.y,
+        r: 0,
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
         fill: (d) => this.scale(d.value)
@@ -309,18 +309,18 @@ export class SatChart {
     //this.planets = this.svg.append('g')
     //  .attr('class', 'planets');
     //
-    //this.planets.selectAll('circle')
-    //  .data(this.data.satellites)
-    //  .enter()
-    //  .append('circle')
-    //  .attr({
-    //    cx: (d) => d.position.x,
-    //    cy: (d) => d.position.y,
-    //    r: this.config.planetRadius,
-    //    stroke: 'black',
-    //    'stroke-width': this.config.strokeWidth,
-    //    fill: (d) => this.scale(d.value)
-    //  });
+    this.planets.selectAll('circle')
+      .transition()
+      .duration(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.3)
+      .attr({
+        cx: (d) => d.position.x,
+        cy: (d) => d.position.y,
+        r: this.config.planetRadius,
+        //stroke: 'black',
+        //'stroke-width': this.config.strokeWidth,
+        //fill: (d) => this.scale(d.value)
+      });
     //
     //this.planets.selectAll('text')
     //  .data(this.data.satellites)
@@ -349,18 +349,21 @@ export class SatChart {
     //this.moons = this.svg.append('g')
     //  .attr('class', 'moons');
     //
-    //this.moons.selectAll('circle')
-    //  .data(moons)
-    //  .enter()
-    //  .append('circle')
-    //  .attr({
-    //    cx: (d) => d.position.x,
-    //    cy: (d) => d.position.y,
-    //    r: this.config.moonRadius,
-    //    stroke: 'black',
-    //    'stroke-width': this.config.strokeWidth,
-    //    fill: (d) => this.scale(d.value)
-    //  });
+    this.moons.selectAll('circle')
+      //.data(moons)
+      //.enter()
+      //.append('circle')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.7)
+      .attr({
+        cx: (d) => d.position.x,
+        cy: (d) => d.position.y,
+        r: this.config.moonRadius,
+        stroke: 'black',
+        'stroke-width': this.config.strokeWidth,
+        fill: (d) => this.scale(d.value)
+      });
     //
     //this.moons.selectAll('text')
     //  .data(moons)
@@ -400,7 +403,8 @@ export class SatChart {
       planet.satellites.forEach((satellite, satelliteIndex) => {
         satellite.position = {
           x: planet.position.x + this.config.planetToMoon * Math.sin(satelliteAngle * satelliteIndex),
-          y: planet.position.y + this.config.planetToMoon * Math.cos(satelliteAngle * satelliteIndex)
+          y: planet.position.y + this.config.planetToMoon * Math.cos(satelliteAngle * satelliteIndex),
+          parent: planet.position
         }
       })
     })
