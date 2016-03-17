@@ -44,7 +44,7 @@ var data = {
     },
     {
       label: 'Sat3',
-      value: 6,
+      value: 8,
       satellites: [
         {
           label: 'Moon8',
@@ -96,6 +96,7 @@ var data = {
           label: 'Moon18',
           value: 10
         }
+
       ]
     }
   ]

@@ -66,7 +66,7 @@ export class SatChart {
         stroke: 'gray',
         'stroke-width': this.config.strokeWidth,
         fill: 'white',
-        //'stroke-dasharray': [10, 10]
+        'stroke-dasharray': [5, 10]
       });
 
     // outer sun
@@ -87,8 +87,8 @@ export class SatChart {
       .attr({
         transform: `translate(${this.data.position.x}, ${this.data.position.y})`,
         fill: (d) => this.scale(d.value),
-        stroke: 'black',
-        'stroke-width': this.config.strokeWidth
+        stroke: 'white',
+        'stroke-width': this.config.outerSunRadius * 0.05
       });
 
     // inner sun
