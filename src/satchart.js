@@ -105,6 +105,23 @@ export class SatChart {
         fill: (d) => this.scale(d.value)
       });
 
+    this.planets.selectAll('text')
+      .data(this.data.satellites)
+      .enter()
+      .append('text')
+      .attr({
+        x: (d) => d.position.x,
+        y: (d) => d.position.y,
+        'font-family': 'sans-serif',
+        'font-size': 20,
+        'text-anchor': 'middle',
+        'alignment-baseline': 'middle',
+        fill: 'black',
+        'fill-opacity': 0
+      })
+      .text((d) => d.label);
+
+
     // outer sun
     this.outerSun = this.svg.append('g')
       .attr('class', 'sun outer');
@@ -150,24 +167,10 @@ export class SatChart {
         'font-size': 100,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black'
+        fill: 'black',
+        'fill-opacity': 0
       })
       .text(this.data.label);
-
-    this.planets.selectAll('text')
-      .data(this.data.satellites)
-      .enter()
-      .append('text')
-      .attr({
-        x: (d) => d.position.x,
-        y: (d) => d.position.y,
-        'font-family': 'sans-serif',
-        'font-size': 20,
-        'text-anchor': 'middle',
-        'alignment-baseline': 'middle',
-        fill: 'black'
-      })
-      .text((d) => d.label);
 
     // moons
     const moons = this.data.satellites
@@ -201,7 +204,8 @@ export class SatChart {
         'font-size': 12,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black'
+        fill: 'black',
+        'fill-opacity': 0
       })
       .text((d) => d.label);
   }
@@ -237,19 +241,14 @@ export class SatChart {
       .attr({
         r: this.config.innerSunRadius
       });
-    //
-    //this.innerSun.append('text')
-    //  .attr({
-    //    x: this.data.position.x,
-    //    y: this.data.position.y,
-    //    'font-family': 'sans-serif',
-    //    'font-size': 100,
-    //    'text-anchor': 'middle',
-    //    'alignment-baseline': 'middle',
-    //    fill: 'black'
-    //  })
-    //  .text(this.data.label);
-    //
+
+    this.innerSun.selectAll('text')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.8)
+      .attr({
+        'fill-opacity': 1
+      });
 
     // planet orbits
     this.planetOrbits.selectAll('circle')
@@ -272,37 +271,17 @@ export class SatChart {
         r: this.config.planetRadius,
       });
 
-    //this.planets.selectAll('text')
-    //  .data(this.data.satellites)
-    //  .enter()
-    //  .append('text')
-    //  .attr({
-    //    x: (d) => d.position.x,
-    //    y: (d) => d.position.y,
-    //    'font-family': 'sans-serif',
-    //    'font-size': 20,
-    //    'text-anchor': 'middle',
-    //    'alignment-baseline': 'middle',
-    //    fill: 'black'
-    //  })
-    //  .text((d) => d.label);
-    //
+    this.planets.selectAll('text')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.8)
+      .attr({
+        'fill-opacity': 1
+      });
+
+
     //// moons
-    //const moons = this.data.satellites
-    //  .map(function (planet) {
-    //    return planet.satellites
-    //  }) // extract moon arrays
-    //  .reduce(function (acc, moons) {
-    //    return acc.concat(moons)
-    //  }, []); // concatenate moon arrays
-    //
-    //this.moons = this.svg.append('g')
-    //  .attr('class', 'moons');
-    //
     this.moons.selectAll('circle')
-      //.data(moons)
-      //.enter()
-      //.append('circle')
       .transition()
       .duration(this.config.animationDuration * 0.3)
       .delay(this.config.animationDuration * 0.7)
@@ -314,21 +293,14 @@ export class SatChart {
         'stroke-width': this.config.strokeWidth,
         fill: (d) => this.scale(d.value)
       });
-    //
-    //this.moons.selectAll('text')
-    //  .data(moons)
-    //  .enter()
-    //  .append('text')
-    //  .attr({
-    //    x: (d) => d.position.x,
-    //    y: (d) => d.position.y,
-    //    'font-family': 'sans-serif',
-    //    'font-size': 12,
-    //    'text-anchor': 'middle',
-    //    'alignment-baseline': 'middle',
-    //    fill: 'black'
-    //  })
-    //  .text((d) => d.label);
+
+    this.moons.selectAll('text')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.8)
+      .attr({
+        'fill-opacity': 1
+      });
 
   }
 
