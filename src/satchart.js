@@ -1,17 +1,17 @@
 export class SatChart {
 
   constructor(element, data, {
-    width = 600,
-    height = 300,
+    width = element.offsetWidth,
+    height = element.offsetHeight,
     valueRange = [1, 5.5, 10],
-    colorRange = ['#ff0000', '#ffff00', '#00ff00'],
+    colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
     strokeWidth = .5,
     distanceRatio = 4 // sun-to-planets / planets-to-moons
     }) {
 
     // config
     const outerSunRadius = Math.min(width, height) / 10;
-    const innerSunRadius = outerSunRadius / 2;
+    const innerSunRadius = outerSunRadius * 0.8;
     const planetRadius = height / 20;
     const moonRadius = height / 40;
     const sunToPlanet = (height / 2 - moonRadius) / (1 + 1 / distanceRatio);
@@ -96,7 +96,7 @@ export class SatChart {
         x: this.data.position.x,
         y: this.data.position.y,
         'font-family': 'sans-serif',
-        'font-size': 50,
+        'font-size': 100,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: 'black'
