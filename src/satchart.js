@@ -6,7 +6,8 @@ export class SatChart {
     valueRange = [1, 5.5, 10],
     colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
     strokeWidth = .5,
-    distanceRatio = 4 // sun-to-planets / planets-to-moons
+    distanceRatio = 4, // sun-to-planets / planets-to-moons,
+    animationDuration = 2000
     }) {
 
     // config
@@ -33,16 +34,17 @@ export class SatChart {
       valueRange,
       colorRange,
       outerSunRadius,
-      innerSunRadius
+      innerSunRadius,
+      animationDuration
     };
 
     // draw chart
-    this.drawChart();
+    this.initChart();
+    this.animate();
 
   }
 
-  drawChart() {
-
+  initChart() {
     this.computeLayout();
     this.scale = d3.scale.linear()
       .domain(this.config.valueRange)
@@ -74,10 +76,10 @@ export class SatChart {
       .attr('class', 'sun outer');
 
     const outerSunArc = d3.svg.arc()
-      .innerRadius(this.config.outerSunRadius * 0.9)
-      .outerRadius(this.config.outerSunRadius)
-      .startAngle((d, i) => (i * 2*Math.PI / this.data.satellites.length))
-      .endAngle((d, i) => (i + 1) * 2*Math.PI / this.data.satellites.length);
+      .innerRadius(this.config.outerSunRadius * 0.002)
+      .outerRadius(this.config.outerSunRadius * 0.001)
+      .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
+      .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
 
     this.outerSun.selectAll('path')
       .data(this.data.satellites)
@@ -100,7 +102,7 @@ export class SatChart {
       .attr({
         cx: this.data.position.x,
         cy: this.data.position.y,
-        r: this.config.innerSunRadius,
+        r: 0,
         stroke: 'black',
         'stroke-width': this.config.strokeWidth,
         fill: this.scale(this.data.value)
@@ -169,8 +171,8 @@ export class SatChart {
 
     // moons
     const moons = this.data.satellites
-      .map(function(planet) {return planet.satellites}) // extract moon arrays
-      .reduce(function(acc, moons) {return acc.concat(moons)}, []); // concatenate moon arrays
+      .map((planet) => planet.satellites) // extract moon arrays
+      .reduce((acc, moons) => acc.concat(moons), []); // concatenate moon arrays
 
     this.moons = this.svg.append('g')
       .attr('class', 'moons');
@@ -202,6 +204,178 @@ export class SatChart {
         fill: 'black'
       })
       .text((d) => d.label);
+  }
+
+  animate() {
+
+    //this.computeLayout();
+    //this.scale = d3.scale.linear()
+    //  .domain(this.config.valueRange)
+    //  .range(this.config.colorRange);
+    //
+    //// svg
+    //this.svg = d3.select(this.element)
+    //  .append('svg')
+    //  .attr('width', this.config.width)
+    //  .attr('height', this.config.height);
+    //
+    //// sun orbit
+    //this.sunOrbit = this.svg.append('g')
+    //  .attr('class', 'sun-orbit');
+    //
+    //this.sunOrbit.append('circle')
+    //  .attr({
+    //    cx: this.data.position.x,
+    //    cy: this.data.position.y,
+    //    r: this.config.sunToPlanet,
+    //    stroke: 'gray',
+    //    'stroke-width': this.config.strokeWidth,
+    //    fill: 'white',
+    //    'stroke-dasharray': [5, 10]
+    //  });
+
+     //outer sun
+    //this.outerSun = this.svg.append('g')
+    //  .attr('class', 'sun outer');
+
+    const outerSunArc = d3.svg.arc()
+      .innerRadius(this.config.outerSunRadius * 0.9)
+      .outerRadius(this.config.outerSunRadius)
+      .startAngle((d, i) => {console.log(d, i); return (i * 2 * Math.PI / this.data.satellites.length)})
+      .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
+
+    this.outerSun.selectAll('path')
+      //.data(this.data.satellites)
+      //.enter()
+      //.append('path')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .delay(this.config.animationDuration * 0.1)
+      .attr('d', outerSunArc)
+      //.attr({
+      //  transform: `translate(${this.data.position.x}, ${this.data.position.y})`,
+      //  fill: (d) => this.scale(d.value),
+      //  stroke: 'white',
+      //  'stroke-width': this.config.outerSunRadius * 0.05
+      //});
+
+    // inner sun
+    //this.innerSun = this.svg.append('g')
+    //  .attr('class', 'sun inner');
+    //
+    this.innerSun.selectAll('circle')
+      //.append('circle')
+      .transition()
+      .duration(this.config.animationDuration * 0.3)
+      .attr({
+        //cx: this.data.position.x,
+        //cy: this.data.position.y,
+        r: this.config.innerSunRadius,
+        //stroke: 'black',
+        //'stroke-width': this.config.strokeWidth,
+        //fill: this.scale(this.data.value)
+      });
+    //
+    //this.innerSun.append('text')
+    //  .attr({
+    //    x: this.data.position.x,
+    //    y: this.data.position.y,
+    //    'font-family': 'sans-serif',
+    //    'font-size': 100,
+    //    'text-anchor': 'middle',
+    //    'alignment-baseline': 'middle',
+    //    fill: 'black'
+    //  })
+    //  .text(this.data.label);
+    //
+    //// planet orbits
+    //this.planetOrbits = this.svg.append('g')
+    //  .attr('class', 'planet-orbits');
+    //
+    //this.planetOrbits.selectAll('circle')
+    //  .data(this.data.satellites)
+    //  .enter()
+    //  .append('circle')
+    //  .attr({
+    //    cx: (d) => d.position.x,
+    //    cy: (d) => d.position.y,
+    //    r: this.config.planetToMoon,
+    //    stroke: (d) => this.scale(d.value),
+    //    'stroke-width': this.config.strokeWidth,
+    //    fill: 'white',
+    //  });
+    //
+    //// planets
+    //this.planets = this.svg.append('g')
+    //  .attr('class', 'planets');
+    //
+    //this.planets.selectAll('circle')
+    //  .data(this.data.satellites)
+    //  .enter()
+    //  .append('circle')
+    //  .attr({
+    //    cx: (d) => d.position.x,
+    //    cy: (d) => d.position.y,
+    //    r: this.config.planetRadius,
+    //    stroke: 'black',
+    //    'stroke-width': this.config.strokeWidth,
+    //    fill: (d) => this.scale(d.value)
+    //  });
+    //
+    //this.planets.selectAll('text')
+    //  .data(this.data.satellites)
+    //  .enter()
+    //  .append('text')
+    //  .attr({
+    //    x: (d) => d.position.x,
+    //    y: (d) => d.position.y,
+    //    'font-family': 'sans-serif',
+    //    'font-size': 20,
+    //    'text-anchor': 'middle',
+    //    'alignment-baseline': 'middle',
+    //    fill: 'black'
+    //  })
+    //  .text((d) => d.label);
+    //
+    //// moons
+    //const moons = this.data.satellites
+    //  .map(function (planet) {
+    //    return planet.satellites
+    //  }) // extract moon arrays
+    //  .reduce(function (acc, moons) {
+    //    return acc.concat(moons)
+    //  }, []); // concatenate moon arrays
+    //
+    //this.moons = this.svg.append('g')
+    //  .attr('class', 'moons');
+    //
+    //this.moons.selectAll('circle')
+    //  .data(moons)
+    //  .enter()
+    //  .append('circle')
+    //  .attr({
+    //    cx: (d) => d.position.x,
+    //    cy: (d) => d.position.y,
+    //    r: this.config.moonRadius,
+    //    stroke: 'black',
+    //    'stroke-width': this.config.strokeWidth,
+    //    fill: (d) => this.scale(d.value)
+    //  });
+    //
+    //this.moons.selectAll('text')
+    //  .data(moons)
+    //  .enter()
+    //  .append('text')
+    //  .attr({
+    //    x: (d) => d.position.x,
+    //    y: (d) => d.position.y,
+    //    'font-family': 'sans-serif',
+    //    'font-size': 12,
+    //    'text-anchor': 'middle',
+    //    'alignment-baseline': 'middle',
+    //    fill: 'black'
+    //  })
+    //  .text((d) => d.label);
 
   }
 
