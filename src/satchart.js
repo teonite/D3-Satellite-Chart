@@ -105,11 +105,12 @@ export class SatChart {
         fill: (d) => this.scale(d.value)
       });
 
-    this.planets.selectAll('text')
+    this.planets.selectAll('text.planet-label')
       .data(this.data.satellites)
       .enter()
       .append('text')
       .attr({
+        'class': 'planet-label',
         x: (d) => d.position.label.x,
         y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
@@ -120,6 +121,24 @@ export class SatChart {
         'fill-opacity': 0
       })
       .text((d) => d.label);
+
+    this.planets.selectAll('text.planet-value')
+      .data(this.data.satellites)
+      .enter()
+      .append('text')
+      .attr({
+        'class': 'planet-value',
+        x: (d) => d.position.x,
+        y: (d) => d.position.y,
+        'font-family': 'sans-serif',
+        'font-size': 30,
+        'text-anchor': 'middle',
+        'alignment-baseline': 'middle',
+        fill: 'black',
+        'fill-opacity': 0
+      })
+      .text((d) => d.value);
+
 
     // outer sun
     this.outerSun = this.svg.append('g')
