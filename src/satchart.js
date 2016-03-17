@@ -65,9 +65,10 @@ export class SatChart {
         cx: this.data.position.x,
         cy: this.data.position.y,
         r: this.config.sunToPlanet,
-        stroke: 'white',
+        stroke: 'black',
+        'stroke-opacity': 0,
         'stroke-width': this.config.strokeWidth,
-        fill: 'white',
+        'fill-opacity': 0,
         'stroke-dasharray': [10, 10]
       });
 
@@ -83,7 +84,8 @@ export class SatChart {
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
         r: this.config.planetToMoon,
-        stroke: 'white',
+        stroke: (d) => this.scale(d.value),
+        'stroke-opacity': 0,
         'stroke-width': this.config.strokeWidth,
         fill: 'white'
       });
@@ -236,7 +238,7 @@ export class SatChart {
       .duration(this.config.animationDuration * 0.3)
       .delay(this.config.animationDuration * 0.7)
       .attr({
-        stroke: 'gray'
+        'stroke-opacity': 1
       });
 
      // outer sun
@@ -277,7 +279,7 @@ export class SatChart {
       .delay(this.config.animationDuration * 0.7)
       .attr({
         r: this.config.planetToMoon,
-        stroke: (d) => this.scale(d.value)
+        'stroke-opacity': 1
       });
 
     // planets
