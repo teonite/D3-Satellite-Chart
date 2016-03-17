@@ -121,7 +121,6 @@ export class SatChart {
       })
       .text((d) => d.label);
 
-
     // outer sun
     this.outerSun = this.svg.append('g')
       .attr('class', 'sun outer');
@@ -216,7 +215,7 @@ export class SatChart {
     this.sunOrbit.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.8)
+      .delay(this.config.animationDuration * 0.7)
       .attr({
         stroke: 'gray'
       });
@@ -225,19 +224,21 @@ export class SatChart {
     const outerSunArc = d3.svg.arc()
       .innerRadius(this.config.outerSunRadius * 0.9)
       .outerRadius(this.config.outerSunRadius)
-      .startAngle((d, i) => {console.log(d, i); return (i * 2 * Math.PI / this.data.satellites.length)})
+      .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
       .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
 
     this.outerSun.selectAll('path')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
+      .duration(this.config.animationDuration * 0.5)
+      .ease('elastic')
       .delay(this.config.animationDuration * 0.1)
       .attr('d', outerSunArc);
 
     // inner sun
     this.innerSun.selectAll('circle')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
+      .duration(this.config.animationDuration * 0.5)
+      .ease('elastic')
       .attr({
         r: this.config.innerSunRadius
       });
@@ -245,7 +246,7 @@ export class SatChart {
     this.innerSun.selectAll('text')
       .transition()
       .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.8)
+      .delay(this.config.animationDuration * 0.7)
       .attr({
         'fill-opacity': 1
       });
@@ -254,7 +255,7 @@ export class SatChart {
     this.planetOrbits.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.8)
+      .delay(this.config.animationDuration * 0.7)
       .attr({
         r: this.config.planetToMoon,
         stroke: (d) => this.scale(d.value)
@@ -265,6 +266,7 @@ export class SatChart {
       .transition()
       .duration(this.config.animationDuration * 0.5)
       .delay(this.config.animationDuration * 0.3)
+      .ease('elastic')
       .attr({
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
@@ -274,30 +276,27 @@ export class SatChart {
     this.planets.selectAll('text')
       .transition()
       .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.8)
+      .delay(this.config.animationDuration * 0.7)
       .attr({
         'fill-opacity': 1
       });
 
-
-    //// moons
+    // moons
     this.moons.selectAll('circle')
       .transition()
-      .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.7)
+      .duration(this.config.animationDuration * 0.5)
+      .delay(this.config.animationDuration * 0.5)
+      .ease('elastic')
       .attr({
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
-        r: this.config.moonRadius,
-        stroke: 'black',
-        'stroke-width': this.config.strokeWidth,
-        fill: (d) => this.scale(d.value)
+        r: this.config.moonRadius
       });
 
     this.moons.selectAll('text')
       .transition()
       .duration(this.config.animationDuration * 0.3)
-      .delay(this.config.animationDuration * 0.8)
+      .delay(this.config.animationDuration * 0.7)
       .attr({
         'fill-opacity': 1
       });
