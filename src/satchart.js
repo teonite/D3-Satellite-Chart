@@ -315,8 +315,8 @@ export class SatChart {
       .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
 
     const outerSunArcSelected = d3.svg.arc()
-      .innerRadius(this.config.outerSunRadius * 1.1)
-      .outerRadius(this.config.outerSunRadius * 1.2)
+      .innerRadius(this.config.outerSunRadius * 1.05)
+      .outerRadius(this.config.outerSunRadius * 1.15)
       .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
       .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
 
