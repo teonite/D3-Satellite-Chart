@@ -428,6 +428,7 @@ export class SatChart {
       });
 
     // moons
+    this.moons.call(this.tooltip);
     this.moons.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
@@ -445,14 +446,18 @@ export class SatChart {
               .transition()
               .duration(1000)
               .ease('elastic')
-              .attr('r', config.moonRadius * 1.3)
+              .attr('r', config.moonRadius * 1.3);
+
+            that.tooltip.show(data);
           })
           .on('mouseout', function (data) {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
               .ease('elastic')
-              .attr('r', config.moonRadius)
+              .attr('r', config.moonRadius);
+
+            that.tooltip.hide(data);
           });
       });
 
