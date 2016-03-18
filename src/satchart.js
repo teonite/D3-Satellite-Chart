@@ -176,7 +176,18 @@ export class SatChart {
       .text((d) => d.value);
 
     // outer sun
-    this.outerSun = this.svg.append('g')
+    this.sun = this.svg.append('g')
+      .attr('class', 'sun-group');
+
+    this.sun.append('circle')
+      .attr({
+        cx: this.data.position.x,
+        cy: this.data.position.y,
+        r: this.config.outerSunRadius * 1.2,
+        'fill-opacity': 0
+      });
+
+    this.outerSun = this.sun.append('g')
       .attr('class', 'sun outer');
 
     const outerSunArc = d3.svg.arc()
@@ -198,7 +209,7 @@ export class SatChart {
       });
 
     // inner sun
-    this.innerSun = this.svg.append('g')
+    this.innerSun = this.sun.append('g')
       .attr('class', 'sun inner');
 
     this.innerSun
@@ -279,9 +290,15 @@ export class SatChart {
       });
 
      // outer sun
-    const outerSunArc = d3.svg.arc()
+    const outerSunArcDefault = d3.svg.arc()
       .innerRadius(this.config.outerSunRadius * 0.9)
       .outerRadius(this.config.outerSunRadius)
+      .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
+      .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
+
+    const outerSunArcSelected = d3.svg.arc()
+      .innerRadius(this.config.outerSunRadius * 1.1)
+      .outerRadius(this.config.outerSunRadius * 1.2)
       .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
       .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
 
@@ -290,7 +307,7 @@ export class SatChart {
       .duration(this.config.animationDuration * 0.5)
       .ease('elastic')
       .delay(this.config.animationDuration * 0.1)
-      .attr('d', outerSunArc);
+      .attr('d', outerSunArcDefault);
 
     // inner sun
     this.innerSun.selectAll('circle')
@@ -299,6 +316,35 @@ export class SatChart {
       .ease('elastic')
       .attr({
         r: this.config.innerSunRadius
+      })
+      .each('end', () => {
+        this.sun
+          .on('mouseover', function (data) {
+            d3.select(this).selectAll('g.outer').selectAll('path')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('d', outerSunArcSelected);
+
+            d3.select(this).selectAll('g.inner').selectAll('circle')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.innerSunRadius * 0.95);
+          })
+          .on('mouseout', function (data) {
+            d3.select(this).selectAll('g.outer').selectAll('path')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('d', outerSunArcDefault);
+
+            d3.select(this).selectAll('g.inner').selectAll('circle')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.innerSunRadius)
+          });
       });
 
     this.innerSun.selectAll('text')
