@@ -8,6 +8,10 @@ export class SatChart {
     valueRange = [0, 5, 10],
     colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
     strokeWidth = .5,
+    sunOrbitWidth = 0.5,
+    planetOrbitWidth= 1,
+    orbitColor = 'black',
+    fontColor = 'black',
     distanceRatio = 3, // sun-to-planets / planets-to-moons,
     animationDuration = 2000,
     clampScale = true,
@@ -35,6 +39,10 @@ export class SatChart {
       sunToPlanet,
       planetToMoon,
       strokeWidth,
+      sunOrbitWidth,
+      planetOrbitWidth,
+      orbitColor,
+      fontColor,
       valueRange,
       colorRange,
       outerSunRadius,
@@ -92,9 +100,9 @@ export class SatChart {
         cx: this.data.position.x,
         cy: this.data.position.y,
         r: this.config.sunToPlanet,
-        stroke: 'black',
+        stroke: this.config.orbitColor,
         'stroke-opacity': 0,
-        'stroke-width': this.config.strokeWidth,
+        'stroke-width': this.config.sunOrbitWidth,
         'fill-opacity': 0,
         'stroke-dasharray': [10, 10]
       });
@@ -113,7 +121,7 @@ export class SatChart {
         r: this.config.planetToMoon,
         stroke: (d) => this.scale(d.value),
         'stroke-opacity': 0,
-        'stroke-width': this.config.strokeWidth,
+        'stroke-width': this.config.planetOrbitWidth,
         fill: 'white'
       });
 
@@ -143,7 +151,8 @@ export class SatChart {
         x: (d) => d.position.label.x,
         y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
-        'font-size': this.config.planetRadius,
+        'font-size': this.config.planetRadius * 0.5,
+        'font-weight': 'bold',
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: (d) => this.scale(d.value),
@@ -161,9 +170,10 @@ export class SatChart {
         y: (d) => d.position.y,
         'font-family': 'sans-serif',
         'font-size': this.config.planetRadius * 0.8,
+        'font-weight': 'bold',
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: this.config.fontColor,
         'fill-opacity': 0
       })
       .text((d) => d.value);
@@ -212,9 +222,10 @@ export class SatChart {
         y: this.data.position.y,
         'font-family': 'sans-serif',
         'font-size': this.config.innerSunRadius,
+        'font-weight': 'bold',
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: this.config.fontColor,
         'fill-opacity': 0
       })
       .text(this.data.label);
@@ -251,7 +262,8 @@ export class SatChart {
         'font-size': this.config.moonRadius * 0.5,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: 'black',
+        fill: this.config.fontColor,
+        'font-weight': 'bold',
         'fill-opacity': 0
       })
       .text((d) => d.label);
