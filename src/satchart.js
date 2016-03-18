@@ -1,4 +1,5 @@
 import d3 from 'd3'
+import tooltip from 'd3-tip'
 
 export class SatChart {
 
@@ -78,6 +79,21 @@ export class SatChart {
 
   initChart() {
     this.computeLayout();
+
+    this.tooltip = tooltip()
+    .attr('class', 'd3-tip')
+      .style({
+        'line-height': 1,
+        'font-weight': 'bold',
+        'padding': '12px',
+        background: 'rgba(0, 0, 0, 0.8)',
+        color: '#fff',
+        'border-radius': '4px',
+      })
+    .offset([-10, 0])
+    .html((d) => {
+      return `<strong>${d.label}:</strong> <span style='color:${this.scale(d.value)}'>${d.value}</span>`;
+    });
 
     // create scales
     const {colorRange, valueRange, intervaledValues, clampScale} = this.config;
@@ -174,6 +190,8 @@ export class SatChart {
         'fill-opacity': 0
       })
       .text((d) => d.value);
+
+    planetGroups.call(this.tooltip);
 
     // outer sun
     this.sun = this.svg.append('g')
@@ -365,6 +383,8 @@ export class SatChart {
         'stroke-opacity': 1
       });
 
+    const that = this;
+
     // planets
     const config = this.config;
     this.planets.selectAll('circle')
@@ -384,14 +404,18 @@ export class SatChart {
               .transition()
               .duration(1000)
               .ease('elastic')
-              .attr('r', config.planetRadius * 1.3)
+              .attr('r', config.planetRadius * 1.3);
+
+            that.tooltip.show(data);
           })
           .on('mouseout', function (data) {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
               .ease('elastic')
-              .attr('r', config.planetRadius)
+              .attr('r', config.planetRadius);
+
+            that.tooltip.hide(data);
           });
       });
 
