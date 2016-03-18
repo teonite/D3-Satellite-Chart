@@ -129,10 +129,13 @@ export class SatChart {
     this.planets = this.svg.append('g')
       .attr('class', 'planets');
 
-    this.planets.selectAll('circle')
+    const planetGroups = this.planets.selectAll('g.planet')
       .data(this.data.satellites)
       .enter()
-      .append('circle')
+      .append('g')
+      .attr('class', 'planet');
+
+    planetGroups.append('circle')
       .attr({
         cx: this.data.position.x,
         cy: this.data.position.y,
@@ -142,10 +145,7 @@ export class SatChart {
         fill: (d) => this.scale(d.value)
       });
 
-    this.planets.selectAll('text.planet-label')
-      .data(this.data.satellites)
-      .enter()
-      .append('text')
+    planetGroups.append('text')
       .attr({
         'class': 'planet-label',
         x: (d) => d.position.label.x,
@@ -160,10 +160,7 @@ export class SatChart {
       })
       .text((d) => d.label);
 
-    this.planets.selectAll('text.planet-value')
-      .data(this.data.satellites)
-      .enter()
-      .append('text')
+    planetGroups.append('text')
       .attr({
         'class': 'planet-value',
         x: (d) => d.position.x,
@@ -177,7 +174,6 @@ export class SatChart {
         'fill-opacity': 0
       })
       .text((d) => d.value);
-
 
     // outer sun
     this.outerSun = this.svg.append('g')
@@ -334,18 +330,16 @@ export class SatChart {
         r: this.config.planetRadius
       })
       .each('end', () => {
-        this.planets.selectAll('circle')
+        this.planets.selectAll('g.planet')
           .on('mouseover', function (data) {
-            const planet = d3.select(this);
-            planet
+            d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
               .ease('elastic')
               .attr('r', config.planetRadius * 1.3)
           })
           .on('mouseout', function (data) {
-            const planet = d3.select(this);
-            planet
+            d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
               .ease('elastic')
