@@ -234,9 +234,13 @@ export class SatChart {
     this.moons = this.svg.append('g')
       .attr('class', 'moons');
 
-    this.moons.selectAll('circle')
+    const moonGroups = this.moons.selectAll('g.moon')
       .data(moons)
       .enter()
+      .append('g')
+      .attr('class', 'moon');
+
+    moonGroups
       .append('circle')
       .attr({
         cx: (d) => d.position.parent.x,
@@ -247,9 +251,7 @@ export class SatChart {
         fill: (d) => this.scale(d.value)
       });
 
-    this.moons.selectAll('text')
-      .data(moons)
-      .enter()
+    moonGroups
       .append('text')
       .attr({
         x: (d) => d.position.x,
@@ -365,6 +367,23 @@ export class SatChart {
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
         r: this.config.moonRadius
+      })
+      .each('end', () => {
+        this.moons.selectAll('g.moon')
+          .on('mouseover', function (data) {
+            d3.select(this).selectAll('circle')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.moonRadius * 1.3)
+          })
+          .on('mouseout', function (data) {
+            d3.select(this).selectAll('circle')
+              .transition()
+              .duration(1000)
+              .ease('elastic')
+              .attr('r', config.moonRadius)
+          });
       });
 
     this.moons.selectAll('text')
