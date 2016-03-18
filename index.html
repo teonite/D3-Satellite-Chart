@@ -17,11 +17,13 @@
             {
                 width: 1000,
                 height: 1000,
-                valueRange: [1, 5.5, 10],
-                colorRange: ['#fc2d2d', '#ffffff', '#2979f2'],
+                valueRange: [0, 3, 6, 10],
+                colorRange: ['#fc2d2d', '#ffff00', '#2979f2'],
                 strokeWidth: 0.5,
                 distanceRatio: 3, // sun-to-planets / planets-to-moons
-                animationDuration: 3000
+                animationDuration: 3000,
+                clampScale: true,
+                intervaledValues: true
             }
     );
 </script>

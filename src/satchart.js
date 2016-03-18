@@ -3,11 +3,13 @@ export class SatChart {
   constructor(element, data, {
     width = element.offsetWidth,
     height = element.offsetHeight,
-    valueRange = [1, 5.5, 10],
+    valueRange = [0, 5, 10],
     colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
     strokeWidth = .5,
     distanceRatio = 3, // sun-to-planets / planets-to-moons,
-    animationDuration = 2000
+    animationDuration = 2000,
+    clampScale = true,
+    intervaledValues = false
     }) {
 
     // config
@@ -35,7 +37,9 @@ export class SatChart {
       colorRange,
       outerSunRadius,
       innerSunRadius,
-      animationDuration
+      animationDuration,
+      clampScale,
+      intervaledValues
     };
 
     // draw chart
@@ -44,11 +48,32 @@ export class SatChart {
 
   }
 
+  scale(value) {
+    const {valueRange, colorRange, intervaledValues} = this.config;
+    if(intervaledValues) {
+      // find interval in valueRange array and return corresponding color from colorRange array
+      // clamp values above and below valueRange
+      for(var i = 1; i < valueRange.length; i++) {
+        if(value < valueRange[i]) {
+          return colorRange[i-1];
+        }
+      }
+      return colorRange[colorRange.length-1]; // clamp values above
+    } else {
+      // regular linear scale
+      return this._scale(value);
+    }
+
+  }
+
   initChart() {
     this.computeLayout();
-    this.scale = d3.scale.linear()
-      .domain(this.config.valueRange)
-      .range(this.config.colorRange);
+
+    // create scale
+    const {colorRange, valueRange, intervaledValues, clampScale} = this.config;
+    if(!intervaledValues) {
+      this._scale = d3.scale.linear().domain(valueRange).range(colorRange).clamp(clampScale);
+    }
 
     // svg
     this.svg = d3.select(this.element)
