@@ -71,7 +71,7 @@ export class SatChart {
   initChart() {
     this.computeLayout();
 
-    // create scale
+    // create scales
     const {colorRange, valueRange, intervaledValues, clampScale} = this.config;
     if(!intervaledValues) {
       this._scale = d3.scale.linear().domain(valueRange).range(colorRange).clamp(clampScale);
@@ -143,7 +143,7 @@ export class SatChart {
         x: (d) => d.position.label.x,
         y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
-        'font-size': 30,
+        'font-size': this.config.planetRadius,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: (d) => this.scale(d.value),
@@ -160,7 +160,7 @@ export class SatChart {
         x: (d) => d.position.x,
         y: (d) => d.position.y,
         'font-family': 'sans-serif',
-        'font-size': 30,
+        'font-size': this.config.planetRadius * 0.8,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: 'black',
@@ -211,7 +211,7 @@ export class SatChart {
         x: this.data.position.x,
         y: this.data.position.y,
         'font-family': 'sans-serif',
-        'font-size': 100,
+        'font-size': this.config.innerSunRadius,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: 'black',
@@ -248,7 +248,7 @@ export class SatChart {
         x: (d) => d.position.x,
         y: (d) => d.position.y,
         'font-family': 'sans-serif',
-        'font-size': 12,
+        'font-size': this.config.moonRadius * 0.5,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
         fill: 'black',
