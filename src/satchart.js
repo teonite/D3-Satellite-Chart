@@ -15,6 +15,7 @@ export class SatChart {
     fontColor = 'black',
     distanceRatio = 4, // sun-to-planets / planets-to-moons,
     animationDuration = 2000,
+    transitionDuration = 750,
     clampScale = true,
     intervaledValues = false,
     ease = 'elastic'
@@ -50,6 +51,7 @@ export class SatChart {
       outerSunRadius,
       innerSunRadius,
       animationDuration,
+      transitionDuration,
       clampScale,
       intervaledValues,
       ease
@@ -343,26 +345,26 @@ export class SatChart {
           .on('mouseover', function (data) {
             d3.select(this).selectAll('g.outer').selectAll('path')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('d', outerSunArcSelected);
 
             d3.select(this).selectAll('g.inner').selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('r', config.innerSunRadius * 0.95);
           })
           .on('mouseout', function (data) {
             d3.select(this).selectAll('g.outer').selectAll('path')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('d', outerSunArcDefault);
 
             d3.select(this).selectAll('g.inner').selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('r', config.innerSunRadius)
           });
@@ -387,6 +389,12 @@ export class SatChart {
       });
 
     // planets
+    const outerSunArcPlanetSelected = (planetIndex) => d3.svg.arc()
+        .innerRadius((d, i) => this.config.outerSunRadius * (i == planetIndex ? 1.05 : 0.9))
+        .outerRadius((d, i) => this.config.outerSunRadius * (i == planetIndex ? 1.20 : 1))
+        .startAngle((d, i) => (i * 2 * Math.PI / this.data.satellites.length))
+        .endAngle((d, i) => (i + 1) * 2 * Math.PI / this.data.satellites.length);
+
     const config = this.config;
     this.planets.selectAll('circle')
       .transition()
@@ -400,21 +408,33 @@ export class SatChart {
       })
       .each('end', () => {
         this.planets.selectAll('g.planet')
-          .on('mouseover', function (data) {
+          .on('mouseover', function (data, index) {
             d3.select(this).selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('r', that.config.planetToMoon);
+
+            that.outerSun.selectAll('path')
+              .transition()
+              .duration(that.config.transitionDuration)
+              .ease(that.config.ease)
+              .attr('d', outerSunArcPlanetSelected(index));
 
             that.tooltip.show(data);
           })
           .on('mouseout', function (data) {
             d3.select(this).selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr('r', config.planetRadius);
+
+            that.outerSun.selectAll('path')
+              .transition()
+              .duration(that.config.transitionDuration)
+              .ease(that.config.ease)
+              .attr('d', outerSunArcDefault);
 
             that.tooltip.hide(data);
           });
@@ -445,7 +465,7 @@ export class SatChart {
           .on('mouseover', function (data) {
             d3.select(this).selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr({
                 'r': config.moonRadius * 1.2,
@@ -457,7 +477,7 @@ export class SatChart {
           .on('mouseout', function (data) {
             d3.select(this).selectAll('circle')
               .transition()
-              .duration(1000)
+              .duration(that.config.transitionDuration)
               .ease(that.config.ease)
               .attr({
                 'r': config.moonRadius,
