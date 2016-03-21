@@ -10,7 +10,7 @@ export class SatChart {
     colorRange = ['#EF3300', '#F4A429', '#46BE1F'],
     strokeWidth = 0,
     sunOrbitWidth = 0.3,
-    planetOrbitWidth= 1,
+    planetOrbitWidth= 0.3,
     orbitColor = 'gray',
     fontColor = 'black',
     distanceRatio = 3, // sun-to-planets / planets-to-moons,
@@ -134,7 +134,7 @@ export class SatChart {
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
         r: this.config.planetToMoon,
-        stroke: (d) => this.scale(d.value),
+        stroke: 'gray',
         'stroke-opacity': 0,
         'stroke-width': this.config.planetOrbitWidth,
         fill: 'white'
