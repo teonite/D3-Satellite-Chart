@@ -16,7 +16,8 @@ export class SatChart {
     distanceRatio = 3, // sun-to-planets / planets-to-moons,
     animationDuration = 2000,
     clampScale = true,
-    intervaledValues = false
+    intervaledValues = false,
+    ease = 'elastic'
     }) {
 
     // config
@@ -50,7 +51,8 @@ export class SatChart {
       innerSunRadius,
       animationDuration,
       clampScale,
-      intervaledValues
+      intervaledValues,
+      ease
     };
 
     // draw chart
@@ -274,9 +276,9 @@ export class SatChart {
         cx: (d) => d.position.parent.x,
         cy: (d) => d.position.parent.y,
         r: 0,
-        stroke: 'black',
-        'stroke-width': this.config.strokeWidth,
-        fill: (d) => this.scale(d.value)
+        stroke: (d) => this.scale(d.value),
+        'stroke-width': 2,
+        fill: 'white'
       });
 
     moonGroups
@@ -288,7 +290,7 @@ export class SatChart {
         'font-size': this.config.moonRadius * 0.5,
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
-        fill: this.config.fontColor,
+        fill: 'gray',
         'font-weight': 'bold',
         'fill-opacity': 0
       })
@@ -306,6 +308,8 @@ export class SatChart {
         'stroke-opacity': 1
       });
 
+    const that = this;
+
      // outer sun
     const outerSunArcDefault = d3.svg.arc()
       .innerRadius(this.config.outerSunRadius * 0.9)
@@ -322,7 +326,7 @@ export class SatChart {
     this.outerSun.selectAll('path')
       .transition()
       .duration(this.config.animationDuration * 0.5)
-      .ease('elastic')
+      .ease(this.config.ease)
       .delay(this.config.animationDuration * 0.1)
       .attr('d', outerSunArcDefault);
 
@@ -330,7 +334,7 @@ export class SatChart {
     this.innerSun.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
-      .ease('elastic')
+      .ease(this.config.ease)
       .attr({
         r: this.config.innerSunRadius
       })
@@ -340,26 +344,26 @@ export class SatChart {
             d3.select(this).selectAll('g.outer').selectAll('path')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('d', outerSunArcSelected);
 
             d3.select(this).selectAll('g.inner').selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('r', config.innerSunRadius * 0.95);
           })
           .on('mouseout', function (data) {
             d3.select(this).selectAll('g.outer').selectAll('path')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('d', outerSunArcDefault);
 
             d3.select(this).selectAll('g.inner').selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('r', config.innerSunRadius)
           });
       });
@@ -382,15 +386,13 @@ export class SatChart {
         'stroke-opacity': 1
       });
 
-    const that = this;
-
     // planets
     const config = this.config;
     this.planets.selectAll('circle')
       .transition()
       .duration(this.config.animationDuration * 0.5)
       .delay(this.config.animationDuration * 0.2)
-      .ease('elastic')
+      .ease(this.config.ease)
       .attr({
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
@@ -402,7 +404,7 @@ export class SatChart {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('r', that.config.planetToMoon);
 
             that.tooltip.show(data);
@@ -411,7 +413,7 @@ export class SatChart {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
+              .ease(that.config.ease)
               .attr('r', config.planetRadius);
 
             that.tooltip.hide(data);
@@ -432,7 +434,7 @@ export class SatChart {
       .transition()
       .duration(this.config.animationDuration * 0.5)
       .delay(this.config.animationDuration * 0.4)
-      .ease('elastic')
+      .ease(this.config.ease)
       .attr({
         cx: (d) => d.position.x,
         cy: (d) => d.position.y,
@@ -444,8 +446,11 @@ export class SatChart {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
-              .attr('r', config.moonRadius * 1.3);
+              .ease(that.config.ease)
+              .attr({
+                'r': config.moonRadius * 1.2,
+                'stroke-width': 4
+          });
 
             that.tooltip.show(data);
           })
@@ -453,8 +458,11 @@ export class SatChart {
             d3.select(this).selectAll('circle')
               .transition()
               .duration(1000)
-              .ease('elastic')
-              .attr('r', config.moonRadius);
+              .ease(that.config.ease)
+              .attr({
+                'r': config.moonRadius,
+                'stroke-width': 2
+              });
 
             that.tooltip.hide(data);
           });
