@@ -170,7 +170,7 @@ export class SatChart {
         x: (d) => d.position.label.x,
         y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
-        'font-size': this.config.planetRadius * 0.5,
+        'font-size': this.config.planetRadius * 0.4,
         'font-weight': 'bold',
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
