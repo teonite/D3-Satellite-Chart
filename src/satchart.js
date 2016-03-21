@@ -403,7 +403,7 @@ export class SatChart {
               .transition()
               .duration(1000)
               .ease('elastic')
-              .attr('r', config.planetRadius * 1.3);
+              .attr('r', that.config.planetToMoon);
 
             that.tooltip.show(data);
           })
