@@ -13,7 +13,7 @@ export class SatChart {
     planetOrbitWidth= 0.3,
     orbitColor = 'gray',
     fontColor = 'black',
-    distanceRatio = 3, // sun-to-planets / planets-to-moons,
+    distanceRatio = 4, // sun-to-planets / planets-to-moons,
     animationDuration = 2000,
     clampScale = true,
     intervaledValues = false,
@@ -23,7 +23,7 @@ export class SatChart {
     // config
     const outerSunRadius = Math.min(width, height) / 6.5;
     const innerSunRadius = outerSunRadius * 0.8;
-    const planetRadius = height / 25;
+    const planetRadius = height / 20;
     const moonRadius = height / 40;
     const sunToPlanet = (height / 2 - moonRadius) / (1 + 1 / distanceRatio);
     const planetToMoon = sunToPlanet / distanceRatio;
