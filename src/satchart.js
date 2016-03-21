@@ -7,11 +7,11 @@ export class SatChart {
     width = element.offsetWidth,
     height = element.offsetHeight,
     valueRange = [0, 5, 10],
-    colorRange = ['#fc2d2d', '#ffffff', '#2979f2'],
-    strokeWidth = .5,
-    sunOrbitWidth = 0.5,
+    colorRange = ['#EF3300', '#F4A429', '#46BE1F'],
+    strokeWidth = 0,
+    sunOrbitWidth = 0.3,
     planetOrbitWidth= 1,
-    orbitColor = 'black',
+    orbitColor = 'gray',
     fontColor = 'black',
     distanceRatio = 3, // sun-to-planets / planets-to-moons,
     animationDuration = 2000,
@@ -119,8 +119,7 @@ export class SatChart {
         stroke: this.config.orbitColor,
         'stroke-opacity': 0,
         'stroke-width': this.config.sunOrbitWidth,
-        'fill-opacity': 0,
-        'stroke-dasharray': [10, 10]
+        'fill-opacity': 0
       });
 
     // planet orbits
