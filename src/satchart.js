@@ -23,7 +23,7 @@ export class SatChart {
     // config
     const outerSunRadius = Math.min(width, height) / 6.5;
     const innerSunRadius = outerSunRadius * 0.8;
-    const planetRadius = height / 20;
+    const planetRadius = height / 25;
     const moonRadius = height / 40;
     const sunToPlanet = (height / 2 - moonRadius) / (1 + 1 / distanceRatio);
     const planetToMoon = sunToPlanet / distanceRatio;
