@@ -22,11 +22,12 @@ export class SatChart {
     }) {
 
     // config
-    const outerSunRadius = Math.min(width, height) / 6.5;
+    const minDim = Math.min(width, height);
+    const outerSunRadius = minDim / 6.5;
     const innerSunRadius = outerSunRadius * 0.8;
-    const planetRadius = height / 20;
-    const moonRadius = height / 40;
-    const sunToPlanet = (height / 2 - moonRadius) / (1 + 1 / distanceRatio);
+    const planetRadius = minDim / 20;
+    const moonRadius = minDim / 40;
+    const sunToPlanet = (minDim / 2 - moonRadius) / (1 + 1 / distanceRatio);
     const planetToMoon = sunToPlanet / distanceRatio;
 
     this.element = element;
