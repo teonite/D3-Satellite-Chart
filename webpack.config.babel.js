@@ -11,7 +11,7 @@ export default {
     path: dir_dist,
     filename: 'satchart.js',
     library: 'satchart',
-    libraryTarget: 'var'
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [
