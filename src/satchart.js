@@ -193,7 +193,7 @@ export class SatChart {
         fill: this.config.fontColor,
         'fill-opacity': 0
       })
-      .text((d) => d.value);
+      .text((d) => d3.format(".2f")(d.value));
 
     planetGroups.call(this.tooltip);
 

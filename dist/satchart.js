@@ -292,7 +292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fill: this.config.fontColor,
 	        'fill-opacity': 0
 	      }).text(function (d) {
-	        return d.value;
+	        return _d2.default.format(".2f")(d.value);
 	      });
 
 	      planetGroups.call(this.tooltip);
