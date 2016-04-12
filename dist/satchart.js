@@ -116,7 +116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var outerSunRadius = minDim / 6.5;
 	    var innerSunRadius = outerSunRadius * 0.8;
 	    var planetRadius = minDim / 20;
-	    var moonRadius = minDim / 40;
+	    var moonRadius = minDim / 30;
 	    var sunToPlanet = (minDim / 2 - moonRadius) / (1 + 1 / distanceRatio);
 	    var planetToMoon = sunToPlanet / distanceRatio;
 
@@ -192,7 +192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        color: '#fff',
 	        'border-radius': '4px'
 	      }).offset([-10, 0]).html(function (d) {
-	        return '<strong>' + d.label + ':</strong> <span style=\'color:' + _this.scale(d.value) + '\'>' + d.value + '</span>';
+	        return '<strong>' + d.tip + ':</strong> <span style=\'color:' + _this.scale(d.value) + '\'>' + d.value + '</span>';
 	      });
 
 	      // create scales
@@ -264,7 +264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return d.position.label.y;
 	        },
 	        'font-family': 'sans-serif',
-	        'font-size': this.config.planetRadius * 0.4,
+	        'font-size': this.config.planetRadius * 0.6,
 	        'font-weight': 'bold',
 	        'text-anchor': 'middle',
 	        'alignment-baseline': 'middle',

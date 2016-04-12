@@ -26,13 +26,12 @@ export class SatChart {
     const outerSunRadius = minDim / 6.5;
     const innerSunRadius = outerSunRadius * 0.8;
     const planetRadius = minDim / 20;
-    const moonRadius = minDim / 40;
+    const moonRadius = minDim / 30;
     const sunToPlanet = (minDim / 2 - moonRadius) / (1 + 1 / distanceRatio);
     const planetToMoon = sunToPlanet / distanceRatio;
 
     this.element = element;
     this.data = data;
-    const [cx, cy] = [width / 2, height / 2];
     this.config = {
       width,
       height,
@@ -97,7 +96,7 @@ export class SatChart {
       })
     .offset([-10, 0])
     .html((d) => {
-      return `<strong>${d.label}:</strong> <span style='color:${this.scale(d.value)}'>${d.value}</span>`;
+      return `<strong>${d.tip}:</strong> <span style='color:${this.scale(d.value)}'>${d.value}</span>`;
     });
 
     // create scales
@@ -171,7 +170,7 @@ export class SatChart {
         x: (d) => d.position.label.x,
         y: (d) => d.position.label.y,
         'font-family': 'sans-serif',
-        'font-size': this.config.planetRadius * 0.4,
+        'font-size': this.config.planetRadius * 0.6,
         'font-weight': 'bold',
         'text-anchor': 'middle',
         'alignment-baseline': 'middle',
