@@ -32,6 +32,7 @@ export class SatChart {
 
     this.element = element;
     this.data = data;
+    const [cx, cy] = [width / 2, height / 2];
     this.config = {
       width,
       height,
