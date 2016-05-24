@@ -11,13 +11,20 @@
 
 At the time there was no module like this available - so we've created one.
 We love simplicity! We've put much effort in making this module as slim and easy to use as possible.
-
+This chart was specially made for presenting good looking indicators with their values. Additionally allows to present a main grade of this indicators.
 
 # Instalation
 
 `npm install satellite-chart`
 
 # Basic Usage
+
+To main html file add:
+
+ ```html
+ <script src="satchart.js" type="text/javascript"></script>
+ ```
+
 
 ```javascript
 var satchart = new satchart.SatChart(
@@ -115,26 +122,6 @@ var data = {
           label: 'Moon11',
           tip: 'example11',
           value: 10
-        },
-        {
-          label: 'Moon12',
-          tip: 'example12',
-          value: 2
-        },
-        {
-          label: 'Moon13',
-          tip: 'example13',
-          value: 4
-        },
-        {
-          label: 'Moon14',
-          tip: 'example14',
-          value: 7
-        },
-        {
-          label: 'Moon15',
-          tip: 'example15',
-          value: 9
         }
       ]
     },
