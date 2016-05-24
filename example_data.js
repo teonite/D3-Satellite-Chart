@@ -3,97 +3,119 @@ var data = {
   value: 9,
   satellites: [
     {
-      label: 'Sat1',
+      label: 'Functionality',
+      tip: 'Functionality',
       value: 1,
       satellites: [
         {
-          label: 'Moon1',
+          label: 'Rate1',
+          tip: 'value1',
           value: 1
         },
         {
-          label: 'Moon2',
+          label: 'Rate2',
+          tip: 'value2',
           value: 3
         },
         {
-          label: 'Moon3',
+          label: 'Rate3',
+          tip: 'value3',
           value: 6
         },
         {
-          label: 'Moon4',
+          label: 'Rate4',
+          tip: 'value4',
           value: 10
         }
       ]
     },
     {
-      label: 'Sat2',
+      label: 'Ease of use',
       value: 3,
+      tip: 'Ease of use',
       satellites: [
         {
-          label: 'Moon5',
+          label: 'Rate5',
+          tip: 'value5',
           value: 1
         },
         {
-          label: 'Moon6',
+          label: 'Rate6',
+          tip: 'value6',
           value: 5
         },
         {
-          label: 'Moon7',
+          label: 'Rate7',
+          tip: 'value7',
           value: 10
         }
       ]
     },
     {
-      label: 'Sat3',
+      label: 'Security',
       value: 8,
+      tip: 'Security',
       satellites: [
         {
-          label: 'Moon8',
+          label: 'Rate8',
+          tip: 'value8',
           value: 1
         },
         {
-          label: 'Moon9',
+          label: 'Rate9',
+          tip: 'value9',
           value: 3
         },
         {
-          label: 'Moon10',
+          label: 'Rate10',
+          tip: 'value10',
           value: 6
         },
         {
-          label: 'Moon11',
+          label: 'Rate11',
+          tip: 'value11',
           value: 10
         },
         {
-          label: 'Moon12',
+          label: 'Rate12',
+          tip: 'value12',
           value: 2
         },
         {
-          label: 'Moon13',
+          label: 'Rate13',
+          tip: 'value13',
           value: 4
         },
         {
-          label: 'Moon14',
+          label: 'Rate14',
+          tip: 'value14',
           value: 7
         },
         {
-          label: 'Moon15',
+          label: 'Rate15',
+          tip: 'value15',
           value: 9
         }
       ]
     },
     {
-      label: 'Sat4',
+      label: 'Ergonomics',
       value: 10,
+      tip: 'Ergonomics',
       satellites: [
         {
-          label: 'Moon16',
+          label: 'Rate16',
+          tip: 'value16',
           value: 1
         },
         {
-          label: 'Moon17',
+          label: 'Rate17',
+          tip: 'value17',
           value: 5
         },
         {
-          label: 'Moon18',
+          label: 'Rate18',
+          tip: 'value18',
           value: 10
         }
 
