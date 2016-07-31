@@ -1,4 +1,4 @@
-# Satellite-chart
+# D3 Satellite Chart
 
 ![Screenshot/Example](http://i.imgur.com/KcAYwPql.png)
 
