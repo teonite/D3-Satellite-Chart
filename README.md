@@ -1,5 +1,6 @@
 # Satellite-chart
-[photo]
+
+![Screenshot/Example](http://i.imgur.com/KcAYwPql.png)
 
 #Live example
 
