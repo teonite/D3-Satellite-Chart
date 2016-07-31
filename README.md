@@ -4,7 +4,7 @@
 
 #Live example
 
-https://plnkr.co/edit/2BQXSJ
+https://plnkr.co/edit/2BQXSJ?p=preview
 
 # Table of Contents
 
